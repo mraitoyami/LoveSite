@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Little Story</title>
+  <style>
+    :root {
+      --bg: #fff4f4;
+      --card: #ffffff;
+      --text: #2b2024;
+      --muted: #7b5f67;
+      --pink: #ff7aa2;
+      --pink-dark: #e84f82;
+      --soft: #ffe1eb;
+      --gold: #ffc857;
+      --shadow: 0 18px 40px rgba(232, 79, 130, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at top left, #ffe0ec, transparent 30%),
+                  radial-gradient(circle at bottom right, #ffecc2, transparent 28%),
+                  var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .hearts {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .heart {
+      position: absolute;
+      bottom: -40px;
+      color: rgba(255, 122, 162, 0.35);
+      font-size: 24px;
+      animation: floatUp linear infinite;
+    }
+
+    @keyframes floatUp {
+      from { transform: translateY(0) rotate(0deg); opacity: 0; }
+      15% { opacity: 1; }
+      to { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+    }
+
+    header {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 18px;
+      text-align: center;
+    }
+
+    .hero {
+      max-width: 850px;
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      box-shadow: var(--shadow);
+      border-radius: 34px;
+      padding: 45px 24px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--soft);
+      color: var(--pink-dark);
+      padding: 9px 16px;
+      border-radius: 999px;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 7vw, 5rem);
+      line-height: 1;
+      margin-bottom: 18px;
+      letter-spacing: -2px;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.7;
+      max-width: 620px;
+      margin: 0 auto 26px;
+    }
+
+    .btn {
+      border: none;
+      background: linear-gradient(135deg, var(--pink), var(--pink-dark));
+      color: white;
+      padding: 14px 22px;
+      border-radius: 999px;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 12px 22px rgba(232, 79, 130, 0.28);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 18px 28px rgba(232, 79, 130, 0.35);
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+      width: min(1050px, 100%);
+      margin: auto;
+      padding: 0 18px 80px;
+    }
+
+    section {
+      margin: 28px 0;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 26px;
+    }
+
+    .section-title {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      margin-bottom: 8px;
+    }
+
+    .section-desc {
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 22px;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 16px;
+    }
+
+    .memory-card {
+      background: var(--card);
+      border-radius: 22px;
+      padding: 18px;
+      border: 1px solid #ffe3ec;
+    }
+
+    .memory-card h3 {
+      margin-bottom: 6px;
+      color: var(--pink-dark);
+    }
+
+    .memory-card p {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .quiz-box {
+      display: grid;
+      gap: 18px;
+    }
+
+    .question-card {
+      background: var(--card);
+      border: 1px solid #ffe3ec;
+      border-radius: 24px;
+      padding: 18px;
+    }
+
+    .question-card h3 {
+      margin-bottom: 12px;
+      font-size: 1.08rem;
+    }
+
+    .answers {
+      display: grid;
+      gap: 10px;
+    }
+
+    .answer-btn {
+      text-align: left;
+      border: 2px solid #ffe0eb;
+      background: #fff8fb;
+      border-radius: 16px;
+      padding: 13px 14px;
+      cursor: pointer;
+      font-weight: 700;
+      color: var(--text);
+      transition: 0.2s;
+    }
+
+    .answer-btn:hover {
+      border-color: var(--pink);
+      transform: translateX(4px);
+    }
+
+    .answer-btn.correct {
+      background: #e7fff1;
+      border-color: #48c57a;
+    }
+
+    .answer-btn.wrong {
+      background: #fff0f0;
+      border-color: #ff6b6b;
+    }
+
+    .feedback {
+      margin-top: 10px;
+      color: var(--pink-dark);
+      font-weight: 800;
+      display: none;
+    }
+
+    .open-question textarea {
+      width: 100%;
+      min-height: 120px;
+      resize: vertical;
+      border: 2px solid #ffe0eb;
+      border-radius: 18px;
+      padding: 14px;
+      font-size: 1rem;
+      outline: none;
+      background: #fff8fb;
+      color: var(--text);
+    }
+
+    .open-question textarea:focus {
+      border-color: var(--pink);
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 14px;
+    }
+
+    .photo {
+      min-height: 210px;
+      background: linear-gradient(135deg, #ffe1eb, #fff1c9);
+      border-radius: 24px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 18px;
+      color: var(--pink-dark);
+      font-weight: 900;
+      border: 2px dashed rgba(232, 79, 130, 0.35);
+    }
+
+    .secret {
+      text-align: center;
+    }
+
+    .secret-message {
+      display: none;
+      margin-top: 18px;
+      background: #fff8fb;
+      border: 1px solid #ffe0eb;
+      padding: 20px;
+      border-radius: 22px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .score-box {
+      display: none;
+      margin-top: 22px;
+      padding: 20px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, #fff0f6, #fff7dc);
+      text-align: center;
+      font-weight: 900;
+      color: var(--pink-dark);
+      font-size: 1.2rem;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 40px 18px;
+      position: relative;
+      z-index: 1;
+    }
+
+    @media (max-width: 600px) {
+      .hero, section {
+        padding: 22px;
+        border-radius: 24px;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="hearts" id="hearts"></div>
+
+  <header>
+    <div class="hero">
+      <div class="badge">Made only for us</div>
+      <h1>Our Little Story</h1>
+      <p>
+        This is a small website about us — our memories, our funny moments,
+        our questions, and the future we are building together.
+      </p>
+      <button class="btn" onclick="scrollToQuiz()">Start Our Quiz</button>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <h2 class="section-title">🌙 Our Timeline</h2>
+      <p class="section-desc">Change these cards to your real memories.</p>
+
+      <div class="timeline">
+        <div class="memory-card">
+          <h3>1. The Day We Met</h3>
+          <p>Write where you first met, what happened, and what you remember most.</p>
+        </div>
+
+        <div class="memory-card">
+          <h3>2. Our First Favorite Moment</h3>
+          <p>Write a cute memory: a walk, a message, a call, a laugh, or a special day.</p>
+        </div>
+
+        <div class="memory-card">
+          <h3>3. Why You Matter To Me</h3>
+          <p>Write something honest. Not too fancy. Just real words from you.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="quiz">
+      <h2 class="section-title">💘 How Well Do You Remember Us?</h2>
+      <p class="section-desc">Edit the questions and answers in the JavaScript part at the bottom.</p>
+
+      <div class="quiz-box" id="quizBox"></div>
+      <div class="score-box" id="scoreBox"></div>
+    </section>
+
+    <section>
+      <h2 class="section-title">🥺 Deep Questions</h2>
+      <p class="section-desc">These are not tests. These are for honest answers.</p>
+
+      <div class="quiz-box">
+        <div class="question-card open-question">
+          <h3>What is one thing you wish I understood better?</h3>
+          <textarea placeholder="Write your answer here..."></textarea>
+        </div>
+
+        <div class="question-card open-question">
+          <h3>When do you feel most loved by me?</h3>
+          <textarea placeholder="Write your answer here..."></textarea>
+        </div>
+
+        <div class="question-card open-question">
+          <h3>What is one future memory you want us to create?</h3>
+          <textarea placeholder="Write your answer here..."></textarea>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">📸 Memory Gallery</h2>
+      <p class="section-desc">Replace these boxes with your real photos later.</p>
+
+      <div class="gallery">
+        <div class="photo">Add Photo 1<br />Our first memory</div>
+        <div class="photo">Add Photo 2<br />A funny moment</div>
+        <div class="photo">Add Photo 3<br />A special day</div>
+        <div class="photo">Add Photo 4<br />My favorite picture</div>
+      </div>
+    </section>
+
+    <section class="secret">
+      <h2 class="section-title">🎁 Secret Ending</h2>
+      <p class="section-desc">Only open this after finishing the quiz.</p>
+      <button class="btn" onclick="showSecret()">Unlock Secret Message</button>
+
+      <div class="secret-message" id="secretMessage">
+        I made this website because you are special to me. I know I am not perfect,
+        but I want us to keep growing, laughing, learning, and choosing each other
+        with honesty and care. Thank you for being part of my life. 💗
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Made with care, only for us 💞
+  </footer>
+
+  <script>
+    // =============================
+    // EDIT YOUR QUIZ QUESTIONS HERE
+    // correctIndex starts at 0.
+    // Example: answers[0] is first answer, answers[1] is second answer.
+    // =============================
+
+    const questions = [
+      {
+        question: "Where did we first meet?",
+        answers: ["School", "Online", "At a shop", "Through a friend"],
+        correctIndex: 0,
+        message: "This memory started everything 💗"
+      },
+      {
+        question: "What do I like most about you?",
+        answers: ["Your smile", "Your kindness", "Your jokes", "Everything"],
+        correctIndex: 3,
+        message: "Correct. It is honestly everything."
+      },
+      {
+        question: "Who is more stubborn?",
+        answers: ["Me", "You", "Both of us", "Nobody"],
+        correctIndex: 2,
+        message: "Yeah... probably both of us 😂"
+      },
+      {
+        question: "What should we do more together?",
+        answers: ["Talk honestly", "Go on walks", "Watch movies", "All of these"],
+        correctIndex: 3,
+        message: "Exactly. More good memories, less distance."
+      },
+      {
+        question: "What is our strongest power?",
+        answers: ["Trust", "Patience", "Laughing together", "Not giving up"],
+        correctIndex: 3,
+        message: "Not giving up is what makes us stronger."
+      }
+    ];
+
+    let score = 0;
+    let answered = 0;
+
+    const quizBox = document.getElementById("quizBox");
+    const scoreBox = document.getElementById("scoreBox");
+
+    function loadQuiz() {
+      questions.forEach((item, questionIndex) => {
+        const card = document.createElement("div");
+        card.className = "question-card";
+
+        const title = document.createElement("h3");
+        title.textContent = `${questionIndex + 1}. ${item.question}`;
+        card.appendChild(title);
+
+        const answersDiv = document.createElement("div");
+        answersDiv.className = "answers";
+
+        item.answers.forEach((answer, answerIndex) => {
+          const button = document.createElement("button");
+          button.className = "answer-btn";
+          button.textContent = answer;
+          button.onclick = () => chooseAnswer(button, card, questionIndex, answerIndex);
+          answersDiv.appendChild(button);
+        });
+
+        const feedback = document.createElement("div");
+        feedback.className = "feedback";
+        feedback.textContent = item.message;
+
+        card.appendChild(answersDiv);
+        card.appendChild(feedback);
+        quizBox.appendChild(card);
+      });
+    }
+
+    function chooseAnswer(button, card, questionIndex, answerIndex) {
+      const buttons = card.querySelectorAll(".answer-btn");
+      const feedback = card.querySelector(".feedback");
+
+      if (card.dataset.answered === "true") return;
+      card.dataset.answered = "true";
+      answered++;
+
+      const correctIndex = questions[questionIndex].correctIndex;
+
+      buttons.forEach((btn, index) => {
+        btn.disabled = true;
+        if (index === correctIndex) btn.classList.add("correct");
+      });
+
+      if (answerIndex === correctIndex) {
+        button.classList.add("correct");
+        score++;
+      } else {
+        button.classList.add("wrong
